@@ -1,0 +1,72 @@
+# Execution begins at address 0 
+    .pos 0
+    irmovq stack, %rsp      # Set up stack pointer
+    call main       # Execute main program
+    halt            # Terminate program 
+
+# Array of 10 elements
+    .align 8
+array:  
+    .quad 0x000000000012
+    .quad 0x000000000055
+    .quad 0x000000000002
+    .quad 0x000000000001
+    .quad 0x000000000004
+    .quad 0x000000000003
+    .quad 0x000000000006
+    .quad 0x000000000005
+    .quad 0x000000000008
+    .quad 0x000000000007
+
+# Main function
+main:   
+    irmovq array, %rdi              # rdi -> &array[0]
+    irmovq $10, %rsi
+    call bubbleSort                 #bubbleSort(array, 10)
+    ret
+    
+# void bubbleSort(long *array, long count)
+# array in %rdi, count in %rsi
+bubbleSort:
+    jmp outer_loop
+
+increment_i:
+    iaddq $1, %rax             # i++
+    
+inner_loop:
+    rrmovq %rax, %r11
+    subq %rsi, %r11
+    jge decrement_count
+    rrmovq %rax, %rdx
+    addq %rdx, %rdx
+    addq %rdx, %rdx
+    addq %rdx, %rdx
+    addq %rdi, %rdx
+    mrmovq (%rdx), %r9          # array[i]
+    mrmovq 8(%rdx), %rcx        # array[i+1]
+    rrmovq %rcx, %r11
+    subq %r9, %r11
+    jge increment_i
+    jmp swap                    # swaps array[i] and array[i+1]
+    jmp increment_i
+    
+decrement_count:
+    isubq $1, %rsi             # count - 1
+    
+outer_loop:
+    andq %rsi, %rsi
+    jle done
+    irmovq $0, %rax             # reset i
+    jmp inner_loop
+
+swap:
+    rmmovq %r9, 8(%rdx)
+    rmmovq %rcx, (%rdx)
+    jmp inner_loop
+
+done:
+    ret
+
+# Stack starts here and grows to lower addresses
+    .pos 0x12
+stack:

@@ -1,0 +1,20 @@
+5-3
+iaddq instruction to y86-64 architecture
+
+Stage computation: iaddq V, rB
+
+Fetch Stage: icode: ifun <-- M1[PC]
+	     rA:rB <-- M1[PC+1]
+	     valC <-- M8[PC+2]
+	     valP<-- PC + 10
+
+Decode Stage: valB <-- R[rB]
+
+Execute Stage: valE <-- valB Op valA
+	       setCC
+
+Memory Stage: n/a
+
+Write Back Stage: R[rB] <-- valE
+
+PC Update Stage: PC <-- valP

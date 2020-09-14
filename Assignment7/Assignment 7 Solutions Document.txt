@@ -1,0 +1,11 @@
+2. a) - Total number of (hits + misses) together can be calculated by multiplying 32, 32, and 4 for the total number of points write lines. This comes to 32 x 32 x 4 =         4096.
+      - Total number of misses can be calculated by dividing (hits + misses) / (block size). This equals (4096) / (64) = 64. Multiply 64 by 4, to get 256. Thus, there          are 256 misses.
+      - The miss rate can be calculated as  (misses) / (hits + misses). This is equal to 256 / 4096, which gets us 0.0625.  
+      - 0.0625 x 100 = 6.25%
+      - Therefore, the miss rate of the cache when running the code, assuming that n is 32, will be a miss rate of 6.25%.
+
+   b) - Total number of (hits + misses) together can be calculated by multiplying 32, 32, and 4 for the total number of points write lines. This comes to 32 x 32 x 4 =         4096.
+      - Total number of misses can be calculate by dividing (hits + misses) / (block size). This equals (4096) / (64) = 64. Multiply 64 by 4, to get 256. Thus, there           are 256 misses.
+      - The miss rate can be calculated as  (misses) / (hits + misses). This is equal to 256 / 4096, which gets us 0.0625.  
+      - 0.0625 x 100 = 6.25%
+      - Therefore, the miss rate of the cache when running the code, assuming that n is 32, will be a miss rate of 6.25%.

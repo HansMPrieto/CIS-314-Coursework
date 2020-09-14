@@ -1,0 +1,317 @@
+Problem 4: Convert the following hex values to decimal assuming that they are stored as 32-bit 2s complement integers
+	
+	a) 0x000000C4
+		1. Convert as normal = 
+			0000 0000 0000 0000 0000 0000 1100 0100
+			= (2)^[7] + (2)^[6] + (2)^[2]
+			= 196
+
+	b) 0xFFFFFEC6
+		1. Negative, so we need to flip the bits and add 1
+			= 1111 1111 1111 1111 1111 1110 1100 0110
+			= ~(1111 1111 1111 1111 1111 1110 1100 0110)
+			= 0000 0000 0000 0000 0000 0001 0011 1001
+			= (2)^[8] + (2)^[5] + (2)^[4] + (2)^[3] + (2)^[0]
+			= Decimal 313
+			= 313 + 1
+			= 314
+			= -314
+
+
+	c) 0xFFFFFFFF
+		1. Negative, so we need to flip the bits and add 1
+			= 1111 1111 1111 1111 1111 1111 1111 1111
+			= ~(1111 1111 1111 1111 1111 1111 1111 1111)
+			= 0000 0000 0000 0000 0000 0000 0000 0000
+			= Decimal 0
+			= 0 + 1
+			= 1
+			= -1
+
+
+Problem 5: Convert the following hex values to decimal assuming that they are encoded as IEEE 754 single-precision floating-point numbers:
+	
+	a) 0xBF800000
+
+		1. Convert to binary:
+			= 1011 1111 1000 0000 0000 0000 0000 0000
+
+		2. Segment into 3 parts:
+			= 1 01111111 00000000000000000000000
+			
+			  SIGN  EXPONENT 	  MANTISSA
+			=  1    01111111   00000000000000000000000  
+		
+		3. Sign bit is 1
+
+		4. Exponent is 01111111 (0x7F) = (2)^[6] + (2)^[5] + (2)^[4] + (2)^[3] + (2)^[1] + (2)^[0]
+					       = 127 - 127
+					       = 0
+
+		5. Mantissa is 0000 0000 0000... = 0.0
+
+		6. Decimal = (-1)^[1] * (2)^[127-127] * (1 + 0.0)
+			   = -1 * 1 * 1
+			   = -1.0		
+
+
+	b) 0x41940000
+	
+		1. Convert to binary:
+			= 0100 0001 1001 0100 0000 0000 0000 0000
+
+		2. Segment into 3 parts:
+			= 0 10000011 00101000000000000000000
+			
+			  SIGN  EXPONENT 	  MANTISSA
+			=  0    10000011   00101000000000000000000
+
+		3. Sign bit is 0
+
+		4. Exponent is 10000011 (0x83) = (2)^[7] + (2)^[1] + (2)^[0] = 131 -127 = 4
+
+		5. Mantissa is 0010 1000 0000... = 2^(-3) + 2^(-5)
+						 = (1/8) + (1/32)
+						 = 0.15625
+
+		6. Decimal = (-1)^[0] * (2)^[131-127] * (1 + 0.15625)
+			   = 1 * (2)^[4] * 1.15625
+			   = 18.5
+
+
+	c) 0xC39D0000
+
+		1. Convert to Binary:
+			= 1100 0011 1001 1101 0000 0000 0000 0000
+
+		2. Segment into 3 parts:
+			= 1 10000111 00111010000000000000000
+
+			  SIGN  EXPONENT          MANTISSA
+			=  1    10000111   00111010000000000000000
+
+		3. Sign bit is 1
+
+		4. Exponent is 1000 0111 (0x87) = (2)^[7] + (2)^[2] + (2)^[1] + (2)^[0] 
+						= 135 - 127
+						= 8
+
+		5. Mantissa is 0011 1010 0000... = (2)^[-3] + (2)^[-4] + (2)^[-5] + (2)^[-7]
+						 = (1/8) + (1/16) + (1/32) + (1/128)
+						 = 0.2265625
+
+		6. Decimal = (-1)^[1] * (2)^[135-127] * (1 + 0.2265625)
+			   = -1 * (2)^[8] * 1.2265625
+			   = -314.0
+
+
+Problem 6: Convert the following decimal numbers to hex encoded as IEEE 754 signle-precision floating-point numbers.
+
+	a) 1.0
+
+		1. Sign bit = 0
+
+		2. Separate whole number and decimal number:
+		    1, 0.0
+
+		3. Convert to binary:
+		   1 = 0001
+		   0.0 	PROC:
+						#In Front of Decimal
+		     0.0 * 2 = 0.0			0
+		     0.0 * 2 = 0.0 			0
+		     0.0 * 2 = 0.0			0
+		     0.0 * 2 = 0.0			0
+
+		  0.0(Base2) = 0000
+
+		4. Put these together:
+		
+		   0001.0000
+
+		5. Convert to Base 2 SciNot:
+
+		   1.0000 * 2^(0)
+
+		6. Exponent based on precision using 127 bias:
+
+		   0 we got from last step
+		   127 + 0 = 127
+
+		7. Convert EXP to binary:
+				    remainder
+		   127/2 = 63           1
+		   63/2 = 31            1
+		   31/2 = 15            1
+		   15/2 = 7             1
+		   7/2 = 3		1
+		   3/2 = 1              1
+		   1/2 = 0              1
+
+		   127 = 0111 1111
+
+		8. Mantissa
+		
+		   From step 5: 1.0000 
+		   Mantissa is all after decimal = 0000 0000 0000...
+
+		9. Put all parts together
+		
+		SIGN EXPONENT	       MANTISSA
+		  0  01111111  00000000000000000000000
+
+		ALL TOGETHER:
+		   0011 1111 1000 0000 0000 0000 0000 0000
+
+		10. Convert to hex:
+		    0011 = 3
+		    1111 = F
+		    1000 = 8
+		    0000 = 0
+
+		    hex = 0x3F800000
+
+
+	b) -8.25
+		
+		1. Sign bit = 1
+
+		2. Separate whole number and decimal number:
+		    8, 0.25
+
+		3. Convert to binary:
+		   8 = 1000
+		   0.25 PROC:
+						#In Front Of Decimal
+			0.25 * 2 = 0.5			0
+			0.5 * 2 = 1.0			1
+			0.0 * 2 = 0.0			0 
+
+		   0.25(Base2) = 010
+		
+		4. Put these together:
+
+		   1000.010
+	
+		5. Convert to  Base2 SciNot:
+
+		   Move decimal point over:
+		   1.000010 * 2^(3)
+
+		6. Exponent based on precision using 127 bias:
+
+		    3 we got from last step
+		    127 + 3 = 130
+
+		7. Convert EXP to binary:
+				    remainder
+		    130/2 = 65		0
+		    65/2 = 32		1
+		    32/2 = 16		0
+		    16/2 = 8	        0
+		    8/2 = 4		0
+		    4/2 = 2	        0
+		    2/2 = 1		0
+		    1/2 = 0		1
+
+		    130 = 1000 0010
+
+		8. Mantissa
+
+		    From step 5: 1.00010
+		    Mantissa is all after decimal = 0001 0000 0000...
+
+		9. Put all parts together!
+
+		SIGN  EXPONENT	       MANTISSA
+		   1  1000 0010  000010000000000000000000
+
+		ALL TOGETHER:
+		   1100 0001 0000 0100 0000 0000 0000 0000   
+
+		10. Convert to hex:
+		    1100 = C
+		    0001 = 1
+		    0000 = 0
+		    0100 = 4
+
+		    hex = 0xC1040000
+
+	
+	c) 314.5
+
+		1. Sign bit = 0
+	
+		2. Separate whole number and decimal number:
+		    314, 0.5
+
+		3. Convert to binary:
+		   
+		   Convert 314 to binary:
+					 remainder
+		   314/2 = 157		     0
+		   157/2 = 78		     1
+		   78/2 = 39		     0
+		   39/2 = 19		     1
+		   19/2 = 9		     1
+		   9/2 = 4		     1
+		   4/2 = 2		     0
+		   2/2 = 1		     0
+		   1/2 = 0		     1
+		
+		   314 = 100111010
+		
+		   0.5 PROC:
+					    #In Front Of Decimal
+		     0.5 * 2 = 1.0		   1
+		     0.0 * 2 = 0.0 		   0 
+
+		   0.5(Base2) = 10
+
+		4. Put these together:
+		   100111010.10
+		
+		5. Convert to Base 2 SciNot:
+
+		   Move decimal point over:
+		   1.0011101010 * 2^(8)
+
+		6. Exponent based on precision using 127 bias:
+
+		   8 we got from last step
+		   127 + 8 = 135
+
+		7. Convert EXP to binary:
+				    remainder
+		   135/2 = 67		1
+		   67/2 = 33		1
+		   33/2 = 16		1
+		   16/2 = 8		0
+		   8/2 = 4		0
+		   4/2 = 2		0
+		   2/2 = 1		0
+		   1/2 = 0 		1
+		
+		   135 = 10000111
+		
+		8. Mantissa
+		
+		   From step 5: 1.0011101010
+		   Mantissa is all after decimal = 0011101010
+
+		9. Put all parts together!
+
+		SIGN EXPONENT	      MANTISSA
+		  0  10000111  00111010100000000000000
+
+		ALL TOGETHER:
+		   0100 0011 1001 1101 0100 0000 0000 0000
+
+		10. Convert to hex:
+		    0100 = 4
+		    0011 = 3
+		    1001 = 9
+		    1101 = D
+		    0100 = 4
+
+		    hex = 0x439D4000
